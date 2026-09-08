@@ -1,0 +1,33 @@
+import mensajeroPelicula.*
+
+describe "Paquetes de george entregados por Neo" {
+  test "El paquete de George que no está pago no puede ser llevado por Neo a la matrix." {
+
+        paquete.paqueteNoFuePagado()
+
+        assert.equals(false, paquete.puedeMensajeroEntregarPaqueteDestino(neo,laMatrix))
+  }
+
+
+}
+
+describe "Paquetes de George entregaods por JeanGray" {
+    test "El paquete de George que si esta pago puede ser llevado por jean a la matrix" {
+
+        paquete.paqueteFuePagado()
+
+        assert.equals(true, paquete.puedeMensajeroEntregarPaqueteDestino(jeanGray,laMatrix))
+  }
+}
+
+describe "Paquetes de george entregados por Sara" {
+  test "El paquete de George que sí está pago no puede ser llevado por Sara (que pesa 70kg) a Brooklyn si es que utiliza un camión con un acoplado y la entrega anterior puede hacerse si sara usa una moto" {
+        paquete.paqueteFuePagado()
+        sara.configurarPeso(70)
+        sara.configurarVehiculo(camion)
+        camion.cantAcoplados(1)
+        assert.equals(false, paquete.puedeMensajeroEntregarPaqueteDestino(sara,puenteBrooklyn))
+        sara.configurarVehiculo(moto)
+        assert.equals(true, paquete.puedeMensajeroEntregarPaqueteDestino(sara,puenteBrooklyn) )
+  }
+}
