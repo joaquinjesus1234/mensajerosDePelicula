@@ -71,10 +71,11 @@ object sara {
 object neo {
 
     var tieneCredito = false // a veces no puede llamar porque se queda sin crédito.
-
+    const peso = 0
+    
     method peso() {
       
-      return 0
+      return peso
     }
 
     method puedeLlamar(){
@@ -85,15 +86,6 @@ object neo {
     method cargarCredito() {
         
         tieneCredito = true
-    }
-}
-
-
-object vuelo {
-    const peso = 0
-
-    method peso() {
-      return peso
     }
 }
 
@@ -117,11 +109,6 @@ object camion {
 
         return peso + cantAcoplados*500
     }
-
-}
-object destino {
-
-    
 
 }
 
