@@ -1,40 +1,40 @@
 object empresaMensajeria{
 
-    const listaDeMensajero = []
+    const listaDeMensajeros = []
 
     method contratarMensajero(mensajero) {
       
-        listaDeMensajero.add(mensajero)
+        listaDeMensajeros.add(mensajero)
     }
 
     method despedirMensajero(mensajero) {
       
-        listaDeMensajero.remove(neo)
+        listaDeMensajeros.remove(neo)
     }
 
     method despedirATodos(){
 
-        listaDeMensajero.clear()
+        listaDeMensajeros.clear()
     }
 
     method esGrande() {
       
-      return listaDeMensajero.size() > 2
+      return listaDeMensajeros.size() > 2
     }
 
-    method listaDeMensajeros(){
+    method listaDeMensajeros(){ // este solo se usa para testear.
 
-        return listaDeMensajero
+        return listaDeMensajeros
     }
 
     method primeroDeLaEmpresa(){
 
-        return listaDeMensajero.first()
+        return listaDeMensajeros.first()
     }
     
     method ultimoDeLaEmpresa(){
 
-        return listaDeMensajero.last()
+        return listaDeMensajeros.last()
     }
 
     method pesoDelUltimoMensajero(){
@@ -44,12 +44,12 @@ object empresaMensajeria{
 
     method pesoTotalDeMensajeros(){
 
-        return listaDeMensajero.sum({ mensajero => mensajero.peso()} )
+        return listaDeMensajeros.sum({ mensajero => mensajero.peso()} )
     }
 
     method pesoPromedio() {
       
-      return self.pesoTotalDeMensajeros() / listaDeMensajero.size()
+      return self.pesoTotalDeMensajeros() / listaDeMensajeros.size()
     }
 }
 
