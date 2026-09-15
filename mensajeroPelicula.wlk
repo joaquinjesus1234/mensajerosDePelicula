@@ -1,3 +1,28 @@
+object empresaMensajeria{
+
+    const listaDeMensajero = []
+
+    method contratarMensajero(mensajero) {
+      
+        listaDeMensajero.add(mensajero)
+    }
+
+    method despedirMensajero(mensajero) {
+      
+        listaDeMensajero.remove(neo)
+    }
+
+    method despedirATodos(){
+
+        listaDeMensajero.clear()
+    }
+
+    method listaDeMensajeros(){
+
+        return listaDeMensajero
+    }
+}
+
 object paquete {
 
     var paquetePagado = false

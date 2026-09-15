@@ -31,3 +31,38 @@ describe "Paquetes de george entregados por Sara" {
         assert.equals(true, paquete.puedeMensajeroEntregarPaqueteDestino(sara,puenteBrooklyn) )
   }
 }
+
+describe "contratar a mensajero"{
+
+  test" agrego a neo a la lista de empleados de la empresa"{
+
+      empresaMensajeria.contratarMensajero(neo)
+      assert.equals([neo], empresaMensajeria.listaDeMensajeros())
+
+  }
+
+}
+
+describe "despedir a mensajero"{
+
+  test" agrego a neo a la lista de empleados de la empresa"{
+
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(sara)
+      assert.equals([neo,sara], empresaMensajeria.listaDeMensajeros())
+      empresaMensajeria.despedirMensajero(neo)
+      assert.notEquals([neo,sara], empresaMensajeria.listaDeMensajeros())
+      assert.equals([sara], empresaMensajeria.listaDeMensajeros())
+  }
+}
+describe "Despedir a todos los mensajeros"{
+
+  test  "saca todos los empleados de la lista de la empresa."{
+
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(sara)
+      empresaMensajeria.despedirATodos()
+      assert.equals([], empresaMensajeria.listaDeMensajeros())
+  }
+
+}
