@@ -17,9 +17,19 @@ object empresaMensajeria{
         listaDeMensajero.clear()
     }
 
+    method laEmpresaEsGrande() {
+      
+      return listaDeMensajero.size() > 2
+    }
+
     method listaDeMensajeros(){
 
         return listaDeMensajero
+    }
+
+    method primeroDeLaEmpresa(){
+
+        return listaDeMensajero.first()
     }
 }
 
@@ -37,7 +47,7 @@ object paquete {
       
        paquetePagado = false
     }
-    method paqueteFuePagado(){
+    method pagar(){
 
         paquetePagado = true
     }

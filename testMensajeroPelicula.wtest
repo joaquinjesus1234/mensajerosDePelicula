@@ -14,7 +14,7 @@ describe "Paquetes de george entregados por Neo" {
 describe "Paquetes de George entregaods por JeanGray" {
     test "El paquete de George que si esta pago puede ser llevado por jean a la matrix" {
 
-        paquete.paqueteFuePagado()
+        paquete.pagar()
 
         assert.equals(true, paquete.puedeMensajeroEntregarPaqueteDestino(jeanGray,laMatrix))
   }
@@ -22,7 +22,7 @@ describe "Paquetes de George entregaods por JeanGray" {
 
 describe "Paquetes de george entregados por Sara" {
   test "El paquete de George que sí está pago no puede ser llevado por Sara (que pesa 70kg) a Brooklyn si es que utiliza un camión con un acoplado y la entrega anterior puede hacerse si sara usa una moto" {
-        paquete.paqueteFuePagado()
+        paquete.pagar()
         sara.configurarPeso(70)
         sara.configurarVehiculo(camion)
         camion.cantAcoplados(1)
@@ -63,6 +63,42 @@ describe "Despedir a todos los mensajeros"{
       empresaMensajeria.contratarMensajero(sara)
       empresaMensajeria.despedirATodos()
       assert.equals([], empresaMensajeria.listaDeMensajeros())
+  }
+
+}
+
+describe "Analizar si la mensajeria es grande "{
+
+  test " ver si la lista de mensajeros de la empresa tiene más de dos mensajeros" {
+
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(sara)
+      empresaMensajeria.contratarMensajero(jeanGray)
+      assert.equals (true , empresaMensajeria.laEmpresaEsGrande())
+    
+  }
+}
+
+describe "Consultar si el paquete puede ser entregado por el primer empleado de la la empresa de mensajería. " {
+
+  test"el primero de la lista"{
+
+      empresaMensajeria.contratarMensajero(jeanGray)
+      empresaMensajeria.contratarMensajero(sara)
+      empresaMensajeria.contratarMensajero(neo)
+      assert.equals( jeanGray , empresaMensajeria.primeroDeLaEmpresa())
+  }
+
+  test " ver si el paquete puede entregarlo el primer empleado de la lista de mensajeros de la empresa." {
+
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(sara)
+      empresaMensajeria.contratarMensajero(jeanGray)
+      assert.equals(neo, empresaMensajeria.primeroDeLaEmpresa())
+      paquete.pagar()
+      neo.cargarCredito()
+      assert.equals( true , paquete.puedeMensajeroEntregarPaqueteDestino(empresaMensajeria.primeroDeLaEmpresa(), laMatrix))
+
   }
 
 }
