@@ -31,6 +31,16 @@ object empresaMensajeria{
 
         return listaDeMensajero.first()
     }
+    
+    method ultimoDeLaEmpresa(){
+
+        return listaDeMensajero.last()
+    }
+
+    method pesoDelUltimoMensajero(){
+
+        return self.ultimoDeLaEmpresa().peso()
+    }
 }
 
 object paquete {
@@ -61,6 +71,7 @@ object paquete {
         
         return paquetePagado && destino.puedeRecibirMensajero(mensajero)
     }
+    
 
 }
 

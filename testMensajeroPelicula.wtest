@@ -102,3 +102,25 @@ describe "Consultar si el paquete puede ser entregado por el primer empleado de 
   }
 
 }
+
+describe "Saber el peso del último mensajero de la empresa" {
+
+  test "obtener el ultimo de la lista de la empresa"{
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(jeanGray)
+      empresaMensajeria.contratarMensajero(sara)
+      assert.equals(sara, empresaMensajeria.ultimoDeLaEmpresa())
+  }
+
+  test "obtener el peso de sara que es el ultimo de la lista de la empresa." {
+
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(jeanGray)
+      empresaMensajeria.contratarMensajero(sara)
+      sara.configurarPeso(200)
+      sara.configurarVehiculo(camion)
+      camion.cantAcoplados(1)
+      assert.equals(1200, empresaMensajeria.pesoDelUltimoMensajero())
+    
+  }
+}
