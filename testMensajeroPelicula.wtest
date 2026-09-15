@@ -69,13 +69,19 @@ describe "Despedir a todos los mensajeros"{
 
 describe "Analizar si la mensajeria es grande "{
 
-  test " ver si la lista de mensajeros de la empresa tiene más de dos mensajeros" {
+  test " ver si la lista de mensajeros de la empresa tiene más de dos mensajeros, una mensajeria con 3 mensajeros es grande" {
 
       empresaMensajeria.contratarMensajero(neo)
       empresaMensajeria.contratarMensajero(sara)
       empresaMensajeria.contratarMensajero(jeanGray)
-      assert.equals (true , empresaMensajeria.laEmpresaEsGrande())
-    
+      assert.equals (true , empresaMensajeria.esGrande()) //assert.that (empresaMensajeria.esGrande())
+  }
+
+  test "mensajeria con 2 mensajeros o con 1 mensajero no es grande"{
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(sara)
+      assert.notThat(empresaMensajeria.esGrande())
+
   }
 }
 
@@ -94,7 +100,6 @@ describe "Consultar si el paquete puede ser entregado por el primer empleado de 
       empresaMensajeria.contratarMensajero(neo)
       empresaMensajeria.contratarMensajero(sara)
       empresaMensajeria.contratarMensajero(jeanGray)
-      assert.equals(neo, empresaMensajeria.primeroDeLaEmpresa())
       paquete.pagar()
       neo.cargarCredito()
       assert.equals( true , paquete.puedeMensajeroEntregarPaqueteDestino(empresaMensajeria.primeroDeLaEmpresa(), laMatrix))

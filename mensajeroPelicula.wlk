@@ -17,7 +17,7 @@ object empresaMensajeria{
         listaDeMensajero.clear()
     }
 
-    method laEmpresaEsGrande() {
+    method esGrande() {
       
       return listaDeMensajero.size() > 2
     }
@@ -41,19 +41,29 @@ object empresaMensajeria{
 
         return self.ultimoDeLaEmpresa().peso()
     }
+
+    method pesoTotalDeMensajeros(){
+
+        return listaDeMensajero.sum({ mensajero => mensajero.peso()} )
+    }
+
+    method pesoPromedio() {
+      
+      return self.pesoTotalDeMensajeros() / listaDeMensajero.size()
+    }
 }
 
 object paquete {
 
-    var paquetePagado = false
+    var paquetePagado = false  // estaPago = false
 
 
-    method precioPaquete(destino){
+    method precioPaquete(destino){ // method precio()
 
         return destino.precioEnvio()
     }
 
-    method paqueteNoFuePagado() { // este es solo para probar.
+    method paqueteNoFuePagado() { // este es solo para probar. // method noEstaPagado()
       
        paquetePagado = false
     }
@@ -62,12 +72,12 @@ object paquete {
         paquetePagado = true
     }
 
-    method estaPagadoElPaquete() {
+    method estaPagadoElPaquete() {  // method estaPagado()
       
       return paquetePagado
     }
 
-    method puedeMensajeroEntregarPaqueteDestino(mensajero,destino) {
+    method puedeMensajeroEntregarPaqueteDestino(mensajero,destino) {  // 
         
         return paquetePagado && destino.puedeRecibirMensajero(mensajero)
     }
