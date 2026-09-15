@@ -1,6 +1,7 @@
 object empresaMensajeria{
 
     const listaDeMensajeros = []
+    const paquetesPendientes = []
 
     method contratarMensajero(mensajero) {
       
@@ -50,6 +51,38 @@ object empresaMensajeria{
     method pesoPromedio() {
       
       return self.pesoTotalDeMensajeros() / listaDeMensajeros.size()
+    }
+
+    method enviar(algoParaEnviar, unDestino) {
+
+        if(hayAlgunMensajeroQuePuedeEntregar(algoParaEnviar, unDestino)){
+            //entregar
+            // este no va. self.losQuePuedenEnviar(algoParaEnviar, unDestino).anyOne()
+        }else{
+            paquetesPendientes.add(algoParaEnviar)
+        }
+    }
+
+    //true or false
+    method hayAlgunMensajeroQuePuedeEntregar(algoParaEnviar, unDestino) {
+       return listaDeMensajeros.any({ mensajero => paquete.puedeMensajeroEntregarPaquete(algoParaEnviar, unDestino)})
+    }
+
+    //lista de mensajeros
+    method losQuePuedenEnviar(algoParaEnviar, unDestino){
+
+       return listaDeMensajeros.filter({mensajero=> paquete.puedeMensajeroEntregarPaqueteDestino (mensajero, unDestino)})
+    }
+
+    // mensajero o ua exception
+    method elPrimeroQuePuedeEntregar(algoParaEnviar, unDestino){
+
+        return listaDeMensajeros.find({mensajero => paquete.puedeMensajeroEntregarPaqueteDestino(mensajero,unDestino)})
+    }
+
+    method enviarTodos(unaColeccionDePaquetes, unDestino) {
+        
+        unaColeccionDePaquetes.forEach({unPaquete => self.enviar(unPaquete, unDestino)})
     }
 }
 
