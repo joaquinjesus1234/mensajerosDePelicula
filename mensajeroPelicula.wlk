@@ -84,6 +84,11 @@ object empresaMensajeria{
         
         unaColeccionDePaquetes.forEach({unPaquete => self.enviar(unPaquete, unDestino)})
     }
+
+    method elMasCaro() {
+        
+        return paquetesPendientes.max({ paquete => paquete.cuantoSale() })
+    }
 }
 
 object paquete {
@@ -115,7 +120,11 @@ object paquete {
         return paquetePagado && destino.puedeRecibirMensajero(mensajero)
     }
     
-
+    // TO DO : arreglar esto.
+    method cuantoSale() {
+      
+      return 100
+    }
 }
 
 object jeanGray {
