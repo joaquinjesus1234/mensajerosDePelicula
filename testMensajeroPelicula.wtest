@@ -1,11 +1,15 @@
-import mensajeroPelicula.*
+import empresaMensajeria.*
+import paquete.*
+import vehiculo.*
+import mensajeros.*
+import destinos.*
 
 describe "Paquetes de george entregados por Neo" {
   test "El paquete de George que no está pago no puede ser llevado por Neo a la matrix." {
 
-        paquete.paqueteNoFuePagado()
+        paquete.pagar()
 
-        assert.equals(false, paquete.puedeMensajeroEntregarPaqueteDestino(neo,laMatrix))
+        assert.equals(false, paquete.puedeEntregar(neo, laMatrix))
   }
 
 
@@ -16,7 +20,7 @@ describe "Paquetes de George entregaods por JeanGray" {
 
         paquete.pagar()
 
-        assert.equals(true, paquete.puedeMensajeroEntregarPaqueteDestino(jeanGray,laMatrix))
+        assert.equals(true, paquete.puedeEntregar(jeanGray,laMatrix))
   }
 }
 
@@ -26,9 +30,9 @@ describe "Paquetes de george entregados por Sara" {
         sara.configurarPeso(70)
         sara.configurarVehiculo(camion)
         camion.cantAcoplados(1)
-        assert.equals(false, paquete.puedeMensajeroEntregarPaqueteDestino(sara,puenteBrooklyn))
+        assert.equals(false, paquete.puedeEntregar(sara,puenteBrooklyn))
         sara.configurarVehiculo(moto)
-        assert.equals(true, paquete.puedeMensajeroEntregarPaqueteDestino(sara,puenteBrooklyn) )
+        assert.equals(true, paquete.puedeEntregar(sara,puenteBrooklyn) )
   }
 }
 
@@ -102,7 +106,7 @@ describe "Consultar si el paquete puede ser entregado por el primer empleado de 
       empresaMensajeria.contratarMensajero(jeanGray)
       paquete.pagar()
       neo.cargarCredito()
-      assert.equals( true , paquete.puedeMensajeroEntregarPaqueteDestino(empresaMensajeria.primeroDeLaEmpresa(), laMatrix))
+      assert.equals( true , paquete.puedeEntregar(empresaMensajeria.primeroDeLaEmpresa(), laMatrix))
 
   }
 
