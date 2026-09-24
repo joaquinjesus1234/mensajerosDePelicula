@@ -133,3 +133,11 @@ describe "Saber el peso del último mensajero de la empresa" {
     
   }
 }
+
+describe "paqueton" {
+  test "paqueton" {
+    
+     paqueton.pagar(100)
+     assert.equals(true , paqueton.estaTotalmentePago())
+  }
+}
