@@ -21,11 +21,7 @@ object paquete {
         return estaPago && destino.puedePasar(mensajero)
     }
 
-    // TO DO : ARREGLAR.
-    method cuantoSale() {
-      
-      return costo
-    }
+    method cuantoSale() = costo
 }
 
 object paquetito {
@@ -46,8 +42,10 @@ object paquetito {
         
         return destino.puedePasar(mensajero)
     }
-}
 
+    method cuantoSale() = 0  // como es gratis sale 0.
+
+}
 object paqueton{
   
     var property estaPago = false 
@@ -83,9 +81,13 @@ object paqueton{
         costo = costo*destinos.size()
     }
 
-    method puedeEntregar(mensajero) {
+    method puedeEntregar(mensajero,destino) {
         
         return estaPago && destinos.all({ destino => destino.puedePasar(mensajero)})
     }
     
+    method cuantoSale() {
+      
+      return costo
+    }
 }

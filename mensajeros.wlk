@@ -59,3 +59,11 @@ object neo {
         tieneCredito = true
     }
 }
+
+object flash {
+	const peso = 80
+
+	method peso() = peso 
+
+	method puedeLlamar() = true 
+}
