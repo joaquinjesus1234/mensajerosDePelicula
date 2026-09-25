@@ -1,8 +1,8 @@
 import empresaMensajeria.*
-import paquete.*
 import vehiculo.*
 import mensajeros.*
 import destinos.*
+import paquete.*
 
 describe "Paquetes de george entregados por Neo" {
   test "El paquete de George que no está pago no puede ser llevado por Neo a la matrix." {
@@ -134,10 +134,73 @@ describe "Saber el peso del último mensajero de la empresa" {
   }
 }
 
-describe "paqueton" {
-  test "paqueton" {
-    
-     paqueton.pagar(100)
-     assert.equals(true , paqueton.estaTotalmentePago())
+describe "test de la implementacion de paqueton" {
+  test "verificar si funciona el metodo para pagar" {
+
+      paqueton.configurarDestino(puenteBrooklyn)
+      paqueton.configurarDestino(laMatrix)
+      paqueton.pagar(30)
+      paqueton.pagar(70)
+      paqueton.costoTotal()
+      paqueton.estaTotalmentePago()
+      assert.notEquals(true, paqueton.estaPago() )
+  }
+
+  test "verificar que no esta pago"{
+
+      paqueton.configurarDestino(puenteBrooklyn)
+      paqueton.configurarDestino(laMatrix)
+      paqueton.pagar(30)
+      paqueton.pagar(150)
+      paqueton.costoTotal()
+      paqueton.estaTotalmentePago()
+      assert.notEquals(true, paqueton.estaPago() )
+
+  }
+
+  test "verificar si puede entregar el mensajero el paqueton si no esta pago" {
+
+      paqueton.configurarDestino(puenteBrooklyn)
+      paqueton.configurarDestino(laMatrix)
+      paqueton.costoTotal()
+      paqueton.estaTotalmentePago()
+
+      assert.equals(false, paqueton.puedeEntregar(neo))
+  }
+
+  test "verificar si puede entregar el mensajero el paqueton estando pago pero neo no tiene credito" {
+
+      paqueton.configurarDestino(puenteBrooklyn)
+      paqueton.configurarDestino(laMatrix)
+      paqueton.costoTotal()
+      paqueton.pagar(100)
+      paqueton.pagar(50)
+      paqueton.pagar(50)
+      paqueton.estaTotalmentePago()         
+      assert.notEquals(true, paqueton.puedeEntregar(neo))
+  }
+
+  test "verificar si puede entregar el mensajero el paqueton estando pago y neo tiene credito." {
+      paqueton.configurarDestino(puenteBrooklyn)
+      paqueton.configurarDestino(laMatrix)
+      paqueton.costoTotal()
+      paqueton.pagar(100)
+      paqueton.pagar(50)
+      paqueton.pagar(50)
+      paqueton.estaTotalmentePago() 
+      neo.cargarCredito()         
+      assert.equals(true, paqueton.puedeEntregar(neo))
+  }
+}
+
+describe "paquetito" {
+  test "paquetito puede ser entregado por jeanGray en la matrix" {
+
+      assert.equals(true, paquetito.puedeEntregar(jeanGray, laMatrix) )
+  }
+  
+  test "paquetito puede ser entregado por neo en puenteBroolyn" {
+
+      assert.notEquals(true, paquetito.puedeEntregar(neo, laMatrix))
   }
 }

@@ -1,3 +1,6 @@
+import destinos.*
+
+
 object paquete {
 
     var estaPago = false
@@ -15,13 +18,13 @@ object paquete {
 
     method puedeEntregar(mensajero,destino) {
         
-        return estaPago && destino.puedeRecibirMensajero(mensajero)
+        return estaPago && destino.puedePasar(mensajero)
     }
 
     // TO DO : ARREGLAR.
     method cuantoSale() {
       
-      return 100
+      return costo
     }
 }
 
@@ -33,34 +36,56 @@ object paquetito {
 
         return destino.precioEnvio()
     }
+
+    method estaPago(){
+
+        return estaPago
+    }
+
+    method puedeEntregar(mensajero,destino) {
+        
+        return destino.puedePasar(mensajero)
+    }
 }
 
-object paqueton {
+object paqueton{
   
-    var estaPago = costo
-    var property costo = 100
-    const property destinos = []
+    var property estaPago = false 
+    var property costo = 100 
+    var pagadoHastaAhora = 0
+    const destinos = []
 
     method pagar(cantidad) {
         
-        estaPago - cantidad
+        pagadoHastaAhora = pagadoHastaAhora + cantidad
     }
 
-    method estaPago() {
-// TODO: ARREGLAR ESTO
-        estaPago = 0
-        
-    }
+    method estaTotalmentePago(){
 
+       return if (pagadoHastaAhora >= costo) {
+
+            estaPago = true
+        }
+    }
 
     method precio(destino){
 
         return destino.precioEnvio()
     }
 
-    method puedeEntregar(mensajero,destino) {
+    method configurarDestino(destino) {
         
-        return estaPago && destinos.All({ destino => destino.puedeRecibirMensajero(mensajero)})
+        destinos.add(destino)
+    }
+
+    method costoTotal() {
+        
+        costo = costo*destinos.size()
+    }
+
+    method puedeEntregar(mensajero) {
+        
+        return estaPago && destinos.all({ destino => destino.puedePasar(mensajero)})
     }
     
 }
