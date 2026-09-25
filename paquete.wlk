@@ -91,3 +91,10 @@ object paqueton{
       return costo
     }
 }
+
+object paqueteExpress {
+	method puedeEntregar(mensajero, destino) {
+		return destino.puedePasar(mensajero)
+	}
+	method cuantoSale() = 100
+}

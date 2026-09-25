@@ -165,7 +165,7 @@ describe "test de la implementacion de paqueton" {
       paqueton.costoTotal()
       paqueton.estaTotalmentePago()
 
-      assert.equals(false, paqueton.puedeEntregar(neo))
+      assert.equals(false, paqueton.puedeEntregar(neo, puenteBrooklyn))
   }
 
   test "verificar si puede entregar el mensajero el paqueton estando pago pero neo no tiene credito" {
@@ -177,7 +177,7 @@ describe "test de la implementacion de paqueton" {
       paqueton.pagar(50)
       paqueton.pagar(50)
       paqueton.estaTotalmentePago()         
-      assert.notEquals(true, paqueton.puedeEntregar(neo))
+      assert.notEquals(true, paqueton.puedeEntregar(neo, laMatrix))
   }
 
   test "verificar si puede entregar el mensajero el paqueton estando pago y neo tiene credito." {
@@ -189,7 +189,7 @@ describe "test de la implementacion de paqueton" {
       paqueton.pagar(50)
       paqueton.estaTotalmentePago() 
       neo.cargarCredito()         
-      assert.equals(true, paqueton.puedeEntregar(neo))
+      assert.equals(true, paqueton.puedeEntregar(neo,laMatrix))
   }
 }
 describe "paquetito" {
@@ -205,7 +205,7 @@ describe "paquetito" {
 }
 
 
-describe "parte 3 ejercicio 1,  hay algún mensajero que pueda entregar " {
+describe "parte 3 ejercicio 1, hay algún mensajero que pueda entregar " {
 
 	test "si nadie fue contratado, no hay quien entregue" {
 		assert.notThat(empresaMensajeria.hayAlgunMensajeroQuePuedeEntregar(paquete, laMatrix))
@@ -259,7 +259,7 @@ describe "ejercicio 2, obtener todos los mensajeros que pueden llevar un paquete
 	}
 }
 
-describe " ejercicio 3,  sobrepeso de la mensajería" {
+describe " ejercicio 3, sobrepeso de la mensajería" {
 
 	test "una empresa con jeanGray (65kg) y neo (0kg) no tiene sobrepeso" {
 		empresaMensajeria.contratarMensajero(jeanGray)
@@ -277,12 +277,12 @@ describe " ejercicio 3,  sobrepeso de la mensajería" {
 	}
 }
 
-describe " ejercicio 4,  enviar un paquete (o dejarlo pendiente)" {
+describe " ejercicio 4, enviar un paquete (o dejarlo pendiente)" {
 
 	test "si algún mensajero puede entregarlo, el paquete queda entre los enviados" {
 		empresaMensajeria.contratarMensajero(jeanGray)
 		paquete.pagar()
-		empresaMensajeria.enviarSi(paquete, laMatrix)
+		empresaMensajeria.enviar(paquete, laMatrix)
 		assert.that(empresaMensajeria.paquetesEnviados().contains(paquete))
 		assert.notThat(empresaMensajeria.paquetesPendientes().contains(paquete))
 	}
@@ -290,19 +290,19 @@ describe " ejercicio 4,  enviar un paquete (o dejarlo pendiente)" {
 	test "si ningún mensajero puede entregarlo, el paquete queda pendiente" {
 		empresaMensajeria.contratarMensajero(sara) // sara no puede llamar
 		paquete.pagar()
-		empresaMensajeria.enviarSi(paquete, laMatrix)
+		empresaMensajeria.enviar(paquete, laMatrix)
 		assert.that(empresaMensajeria.paquetesPendientes().contains(paquete))
 		assert.notThat(empresaMensajeria.paquetesEnviados().contains(paquete))
 	}
 }
 
-describe " ejercicio 5,  facturación" {
+describe " ejercicio 5, facturación" {
 
 	test "la facturación es la suma de los precios de los paquetes ya enviados" {
 		empresaMensajeria.contratarMensajero(jeanGray)
 		paquete.pagar()
-		empresaMensajeria.enviarSi(paquete, laMatrix)
-		assert.equals(500, empresaMensajeria.facturacion())
+		empresaMensajeria.enviar(paquete, laMatrix)
+		assert.equals(50, empresaMensajeria.facturacion())
 	}
 
 	test "si no se envió ningún paquete, la facturación es 0" {
@@ -310,7 +310,7 @@ describe " ejercicio 5,  facturación" {
 	}
 }
 
-describe " ejercicio 6,  enviar una colección de paquetes" {
+describe " ejercicio 6, enviar una colección de paquetes" {
 
 	test "envía a destino cada paquete de la colección" {
 		empresaMensajeria.contratarMensajero(jeanGray)
@@ -321,25 +321,23 @@ describe " ejercicio 6,  enviar una colección de paquetes" {
 	}
 }
 
-describe " ejercicio 7,  encontrar y enviar el paquete pendiente más caro" {
+describe " ejercicio 7, encontrar y enviar el paquete pendiente más caro" {
 
-	test "el más caro entre los pendientes es el que tiene mayor cuantoSale/precio" {
-		empresaMensajeria.contratarMensajero(sara) // nadie puede entregar todavía -> quedan pendientes
-		paquete.pagar()
+	test "el más caro entre los pendientes es el que tiene mayor cuantoSale()" {
+		// sin mensajeros contratados, cualquier enviar() cae directo a pendientes
+		paquete.pagar() // cuantoSale() = 50
 		paqueton.configurarDestino(laMatrix)
-		paqueton.pagar(100)
-		paqueton.costoTotal()
-		paqueton.estaTotalmentePago()
-		empresaMensajeria.enviarSi(paquete, laMatrix)   // 500
-		empresaMensajeria.enviarSi(paqueton, laMatrix)  // 100
-		assert.equals(paquete, empresaMensajeria.elMasCaro())
+		paqueton.configurarDestino(puenteBrooklyn)
+		paqueton.costoTotal() // costo = 100 * 2 destinos = 200
+		empresaMensajeria.enviar(paquete, laMatrix)
+		empresaMensajeria.enviar(paqueton, laMatrix)
+		assert.equals(paqueton, empresaMensajeria.elMasCaro())
 	}
 
 	test "al enviar el más caro, deja de estar pendiente y pasa a estar enviado" {
-		empresaMensajeria.contratarMensajero(jeanGray) // ahora sí puede entregar
 		paquete.pagar()
-		empresaMensajeria.contratarMensajero(sara)
-		empresaMensajeria.enviarSi(paquete, laMatrix) // arranca pendiente (por sara sola arriba no aplica: jeanGray ya está)
+		empresaMensajeria.enviar(paquete, laMatrix) // sin mensajeros contratados -> pendiente
+		empresaMensajeria.contratarMensajero(jeanGray) // ahora sí hay quien lo entregue
 		empresaMensajeria.enviarElMasCaro(laMatrix)
 		assert.that(empresaMensajeria.paquetesEnviados().contains(paquete))
 		assert.notThat(empresaMensajeria.paquetesPendientes().contains(paquete))
@@ -352,8 +350,13 @@ describe "ejercicio 9, agregar un mensajero y un paquete nuevos y que todo siga 
 		empresaMensajeria.contratarMensajero(flash)
 		paquete.pagar()
 		assert.that(empresaMensajeria.hayAlgunMensajeroQuePuedeEntregar(paquete, laMatrix))
-		empresaMensajeria.enviarSi(paquete, laMatrix)
-		assert.equals(500, empresaMensajeria.facturacion())
+		empresaMensajeria.enviar(paquete, laMatrix)
+		assert.equals(50, empresaMensajeria.facturacion())
 	}
-
+  	test "paqueteExpress (paquete nuevo) puede ser entregado por flash y suma su cuantoSale a la facturación" {
+		empresaMensajeria.contratarMensajero(flash)
+		empresaMensajeria.enviar(paqueteExpress, laMatrix)
+		assert.that(empresaMensajeria.paquetesEnviados().contains(paqueteExpress))
+		assert.equals(100, empresaMensajeria.facturacion())
+	}
 }
