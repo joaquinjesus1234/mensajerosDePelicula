@@ -1,0 +1,362 @@
+import empresaMensajeria.*
+import vehiculo.*
+import mensajeros.*
+import destinos.*
+import paquete.*
+
+describe "Paquetes de george entregados por Neo" {
+  test "El paquete de George que no está pago no puede ser llevado por Neo a la matrix." {
+
+        paquete.pagar()
+
+        assert.equals(false, paquete.puedeEntregar(neo, laMatrix))
+  }
+
+
+}
+
+describe "Paquetes de George entregaods por JeanGray" {
+    test "El paquete de George que si esta pago puede ser llevado por jean a la matrix" {
+
+        paquete.pagar()
+
+        assert.equals(true, paquete.puedeEntregar(jeanGray,laMatrix))
+  }
+}
+
+describe "Paquetes de george entregados por Sara" {
+  test "El paquete de George que sí está pago no puede ser llevado por Sara (que pesa 70kg) a Brooklyn si es que utiliza un camión con un acoplado y la entrega anterior puede hacerse si sara usa una moto" {
+        paquete.pagar()
+        sara.configurarPeso(70)
+        sara.configurarVehiculo(camion)
+        camion.cantAcoplados(1)
+        assert.equals(false, paquete.puedeEntregar(sara,puenteBrooklyn))
+        sara.configurarVehiculo(moto)
+        assert.equals(true, paquete.puedeEntregar(sara,puenteBrooklyn) )
+  }
+}
+
+describe "contratar a mensajero"{
+
+  test" agrego a neo a la lista de empleados de la empresa"{
+
+      empresaMensajeria.contratarMensajero(neo)
+      assert.equals([neo], empresaMensajeria.listaDeMensajeros())
+
+  }
+
+}
+
+describe "despedir a mensajero"{
+
+  test" agrego a neo a la lista de empleados de la empresa"{
+
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(sara)
+      assert.equals([neo,sara], empresaMensajeria.listaDeMensajeros())
+      empresaMensajeria.despedirMensajero(neo)
+      assert.notEquals([neo,sara], empresaMensajeria.listaDeMensajeros())
+      assert.equals([sara], empresaMensajeria.listaDeMensajeros())
+  }
+}
+describe "Despedir a todos los mensajeros"{
+
+  test  "saca todos los empleados de la lista de la empresa."{
+
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(sara)
+      empresaMensajeria.despedirATodos()
+      assert.equals([], empresaMensajeria.listaDeMensajeros())
+  }
+
+}
+
+describe "Analizar si la mensajeria es grande "{
+
+  test " ver si la lista de mensajeros de la empresa tiene más de dos mensajeros, una mensajeria con 3 mensajeros es grande" {
+
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(sara)
+      empresaMensajeria.contratarMensajero(jeanGray)
+      assert.equals (true , empresaMensajeria.esGrande()) //assert.that (empresaMensajeria.esGrande())
+  }
+
+  test "mensajeria con 2 mensajeros o con 1 mensajero no es grande"{
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(sara)
+      assert.notThat(empresaMensajeria.esGrande())
+
+  }
+}
+
+describe "Consultar si el paquete puede ser entregado por el primer empleado de la la empresa de mensajería. " {
+
+  test"el primero de la lista"{
+
+      empresaMensajeria.contratarMensajero(jeanGray)
+      empresaMensajeria.contratarMensajero(sara)
+      empresaMensajeria.contratarMensajero(neo)
+      assert.equals( jeanGray , empresaMensajeria.primeroDeLaEmpresa())
+  }
+
+  test " ver si el paquete puede entregarlo el primer empleado de la lista de mensajeros de la empresa." {
+
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(sara)
+      empresaMensajeria.contratarMensajero(jeanGray)
+      paquete.pagar()
+      neo.cargarCredito()
+      assert.equals( true , paquete.puedeEntregar(empresaMensajeria.primeroDeLaEmpresa(), laMatrix))
+
+  }
+
+}
+
+describe "Saber el peso del último mensajero de la empresa" {
+
+  test "obtener el ultimo de la lista de la empresa"{
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(jeanGray)
+      empresaMensajeria.contratarMensajero(sara)
+      assert.equals(sara, empresaMensajeria.ultimoDeLaEmpresa())
+  }
+
+  test "obtener el peso de sara que es el ultimo de la lista de la empresa." {
+
+      empresaMensajeria.contratarMensajero(neo)
+      empresaMensajeria.contratarMensajero(jeanGray)
+      empresaMensajeria.contratarMensajero(sara)
+      sara.configurarPeso(200)
+      sara.configurarVehiculo(camion)
+      camion.cantAcoplados(1)
+      assert.equals(1200, empresaMensajeria.pesoDelUltimoMensajero())
+    
+  }
+}
+
+describe "test de la implementacion de paqueton" {
+  test "verificar si funciona el metodo para pagar" {
+
+      paqueton.configurarDestino(puenteBrooklyn)
+      paqueton.configurarDestino(laMatrix)
+      paqueton.pagar(30)
+      paqueton.pagar(70)
+      paqueton.costoTotal()
+      paqueton.estaTotalmentePago()
+      assert.notEquals(true, paqueton.estaPago() )
+  }
+
+  test "verificar que no esta pago"{
+
+      paqueton.configurarDestino(puenteBrooklyn)
+      paqueton.configurarDestino(laMatrix)
+      paqueton.pagar(30)
+      paqueton.pagar(150)
+      paqueton.costoTotal()
+      paqueton.estaTotalmentePago()
+      assert.notEquals(true, paqueton.estaPago() )
+
+  }
+
+  test "verificar si puede entregar el mensajero el paqueton si no esta pago" {
+
+      paqueton.configurarDestino(puenteBrooklyn)
+      paqueton.configurarDestino(laMatrix)
+      paqueton.costoTotal()
+      paqueton.estaTotalmentePago()
+
+      assert.equals(false, paqueton.puedeEntregar(neo, puenteBrooklyn))
+  }
+
+  test "verificar si puede entregar el mensajero el paqueton estando pago pero neo no tiene credito" {
+
+      paqueton.configurarDestino(puenteBrooklyn)
+      paqueton.configurarDestino(laMatrix)
+      paqueton.costoTotal()
+      paqueton.pagar(100)
+      paqueton.pagar(50)
+      paqueton.pagar(50)
+      paqueton.estaTotalmentePago()         
+      assert.notEquals(true, paqueton.puedeEntregar(neo, laMatrix))
+  }
+
+  test "verificar si puede entregar el mensajero el paqueton estando pago y neo tiene credito." {
+      paqueton.configurarDestino(puenteBrooklyn)
+      paqueton.configurarDestino(laMatrix)
+      paqueton.costoTotal()
+      paqueton.pagar(100)
+      paqueton.pagar(50)
+      paqueton.pagar(50)
+      paqueton.estaTotalmentePago() 
+      neo.cargarCredito()         
+      assert.equals(true, paqueton.puedeEntregar(neo,laMatrix))
+  }
+}
+describe "paquetito" {
+  test "paquetito puede ser entregado por jeanGray en la matrix" {
+
+      assert.equals(true, paquetito.puedeEntregar(jeanGray, laMatrix) )
+  }
+  
+  test "paquetito puede ser entregado por neo en puenteBroolyn" {
+
+      assert.notEquals(true, paquetito.puedeEntregar(neo, laMatrix))
+  }
+}
+
+
+describe "parte 3 ejercicio 1, hay algún mensajero que pueda entregar " {
+
+	test "si nadie fue contratado, no hay quien entregue" {
+		assert.notThat(empresaMensajeria.hayAlgunMensajeroQuePuedeEntregar(paquete, laMatrix))
+	}
+
+	test "si jeanGray fue contratada y el paquete está pago, sí hay quien lo lleve a la matrix" {
+		empresaMensajeria.contratarMensajero(jeanGray)
+		paquete.pagar()
+		assert.that(empresaMensajeria.hayAlgunMensajeroQuePuedeEntregar(paquete, laMatrix))
+	}
+
+	test "si el paquete no está pago, ningún mensajero puede entregarlo" {
+		empresaMensajeria.contratarMensajero(jeanGray)
+		assert.notThat(empresaMensajeria.hayAlgunMensajeroQuePuedeEntregar(paquete, laMatrix))
+	}
+
+	test "si solo está sara, que no puede llamar, no hay quien entregue a la matrix" {
+		empresaMensajeria.contratarMensajero(sara)
+		paquete.pagar()
+		assert.notThat(empresaMensajeria.hayAlgunMensajeroQuePuedeEntregar(paquete, laMatrix))
+	}
+}
+
+describe "ejercicio 2, obtener todos los mensajeros que pueden llevar un paquete" {
+
+	test "devuelve solo a los mensajeros que pueden entregar a la matrix" {
+		empresaMensajeria.contratarMensajero(jeanGray)
+		empresaMensajeria.contratarMensajero(neo)
+		empresaMensajeria.contratarMensajero(sara)
+		paquete.pagar()
+		// neo todavía no tiene crédito, sara no puede llamar nunca
+		assert.equals([jeanGray], empresaMensajeria.losQuePuedenEnviar(paquete, laMatrix))
+	}
+
+	test "si neo carga crédito, pasa a estar en la lista de los que pueden entregar" {
+		empresaMensajeria.contratarMensajero(jeanGray)
+		empresaMensajeria.contratarMensajero(neo)
+		paquete.pagar()
+		neo.cargarCredito()
+		assert.equals([jeanGray, neo], empresaMensajeria.losQuePuedenEnviar(paquete, laMatrix))
+	}
+
+	test "a brooklyn puede ir cualquiera que no supere la tonelada" {
+		sara.configurarPeso(70)
+		sara.configurarVehiculo(camion)
+		camion.cantAcoplados(1) // 70 + 500 + 500 = 1070kg > 1000, no pasa
+		empresaMensajeria.contratarMensajero(jeanGray)
+		empresaMensajeria.contratarMensajero(sara)
+		paquete.pagar()
+		assert.equals([jeanGray], empresaMensajeria.losQuePuedenEnviar(paquete, puenteBrooklyn))
+	}
+}
+
+describe " ejercicio 3, sobrepeso de la mensajería" {
+
+	test "una empresa con jeanGray (65kg) y neo (0kg) no tiene sobrepeso" {
+		empresaMensajeria.contratarMensajero(jeanGray)
+		empresaMensajeria.contratarMensajero(neo)
+		assert.notThat(empresaMensajeria.tieneSobrepeso())
+	}
+
+	test "si el promedio de peso supera los 500kg, la mensajería tiene sobrepeso" {
+		sara.configurarPeso(800)
+		sara.configurarVehiculo(camion)
+		camion.cantAcoplados(2) // 800 + 500 + 1000 = 2300kg
+		empresaMensajeria.contratarMensajero(sara)
+		empresaMensajeria.contratarMensajero(jeanGray) // 65kg -> promedio (2300+65)/2 = 1182.5
+		assert.that(empresaMensajeria.tieneSobrepeso())
+	}
+}
+
+describe " ejercicio 4, enviar un paquete (o dejarlo pendiente)" {
+
+	test "si algún mensajero puede entregarlo, el paquete queda entre los enviados" {
+		empresaMensajeria.contratarMensajero(jeanGray)
+		paquete.pagar()
+		empresaMensajeria.enviar(paquete, laMatrix)
+		assert.that(empresaMensajeria.paquetesEnviados().contains(paquete))
+		assert.notThat(empresaMensajeria.paquetesPendientes().contains(paquete))
+	}
+
+	test "si ningún mensajero puede entregarlo, el paquete queda pendiente" {
+		empresaMensajeria.contratarMensajero(sara) // sara no puede llamar
+		paquete.pagar()
+		empresaMensajeria.enviar(paquete, laMatrix)
+		assert.that(empresaMensajeria.paquetesPendientes().contains(paquete))
+		assert.notThat(empresaMensajeria.paquetesEnviados().contains(paquete))
+	}
+}
+
+describe " ejercicio 5, facturación" {
+
+	test "la facturación es la suma de los precios de los paquetes ya enviados" {
+		empresaMensajeria.contratarMensajero(jeanGray)
+		paquete.pagar()
+		empresaMensajeria.enviar(paquete, laMatrix)
+		assert.equals(50, empresaMensajeria.facturacion())
+	}
+
+	test "si no se envió ningún paquete, la facturación es 0" {
+		assert.equals(0, empresaMensajeria.facturacion())
+	}
+}
+
+describe " ejercicio 6, enviar una colección de paquetes" {
+
+	test "envía a destino cada paquete de la colección" {
+		empresaMensajeria.contratarMensajero(jeanGray)
+		paquete.pagar()
+		empresaMensajeria.enviarTodos([paquete, paquetito], laMatrix)
+		assert.that(empresaMensajeria.paquetesEnviados().contains(paquete))
+		assert.that(empresaMensajeria.paquetesEnviados().contains(paquetito))
+	}
+}
+
+describe " ejercicio 7, encontrar y enviar el paquete pendiente más caro" {
+
+	test "el más caro entre los pendientes es el que tiene mayor cuantoSale()" {
+		// sin mensajeros contratados, cualquier enviar() cae directo a pendientes
+		paquete.pagar() // cuantoSale() = 50
+		paqueton.configurarDestino(laMatrix)
+		paqueton.configurarDestino(puenteBrooklyn)
+		paqueton.costoTotal() // costo = 100 * 2 destinos = 200
+		empresaMensajeria.enviar(paquete, laMatrix)
+		empresaMensajeria.enviar(paqueton, laMatrix)
+		assert.equals(paqueton, empresaMensajeria.elMasCaro())
+	}
+
+	test "al enviar el más caro, deja de estar pendiente y pasa a estar enviado" {
+		paquete.pagar()
+		empresaMensajeria.enviar(paquete, laMatrix) // sin mensajeros contratados -> pendiente
+		empresaMensajeria.contratarMensajero(jeanGray) // ahora sí hay quien lo entregue
+		empresaMensajeria.enviarElMasCaro(laMatrix)
+		assert.that(empresaMensajeria.paquetesEnviados().contains(paquete))
+		assert.notThat(empresaMensajeria.paquetesPendientes().contains(paquete))
+	}
+}
+
+describe "ejercicio 9, agregar un mensajero y un paquete nuevos y que todo siga funcionando" {
+
+	test "flash (mensajero nuevo) puede entregar un paquete pago a la matrix" {
+		empresaMensajeria.contratarMensajero(flash)
+		paquete.pagar()
+		assert.that(empresaMensajeria.hayAlgunMensajeroQuePuedeEntregar(paquete, laMatrix))
+		empresaMensajeria.enviar(paquete, laMatrix)
+		assert.equals(50, empresaMensajeria.facturacion())
+	}
+  	test "paqueteExpress (paquete nuevo) puede ser entregado por flash y suma su cuantoSale a la facturación" {
+		empresaMensajeria.contratarMensajero(flash)
+		empresaMensajeria.enviar(paqueteExpress, laMatrix)
+		assert.that(empresaMensajeria.paquetesEnviados().contains(paqueteExpress))
+		assert.equals(100, empresaMensajeria.facturacion())
+	}
+}

@@ -1,6 +1,10 @@
 /** First Wollok example */
-object wollok {
+object wollokPrueba {
 	method howAreYou() {
 		return 'I am Wolloktastic!'
 	}
 }
+
+
+
+
